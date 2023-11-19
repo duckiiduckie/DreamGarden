@@ -8,13 +8,14 @@ public class PlayerController : MonoBehaviour
     private int dir;
     private float moveX;
     private float moveY;
-    private float speech = 5f;
+    private float speech = 4f;
     private Animator animator;
     private Vector3 direction;
 
     // Start is called before the first frame update
     private void Start()
     {
+        Rigidbody rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
     }
 
@@ -24,8 +25,12 @@ public class PlayerController : MonoBehaviour
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
         direction = new Vector3(moveX, moveY);
-        transform.Translate(VectorTranslate());
         AnimateMovement();
+    }
+
+    private void FixedUpdate()
+    {
+        transform.position += VectorTranslate();
     }
 
     private void AnimateMovement()
@@ -53,5 +58,10 @@ public class PlayerController : MonoBehaviour
         }
         float sqrt = (float)Math.Sqrt(moveY * moveY + moveX * moveX);
         return direction * speech * Time.deltaTime / sqrt;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("colider");
     }
 }

@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private int dir;
     private float moveX;
     private float moveY;
-    private float speech = 4f;
+    private float speech;
     private Animator animator;
     private Vector3 direction;
 
     // Start is called before the first frame update
     private void Start()
     {
+        speech = 4f;
         Rigidbody rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
     }
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
             return Vector3.zero;
         }
         float sqrt = (float)Math.Sqrt(moveY * moveY + moveX * moveX);
-        return direction * speech * Time.deltaTime / sqrt;
+        return speech * Time.deltaTime * direction / sqrt;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

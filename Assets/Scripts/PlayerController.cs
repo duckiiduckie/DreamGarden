@@ -10,18 +10,31 @@ public class PlayerController : MonoBehaviour
     private float speech;
     private Animator animator;
     private Vector3 direction;
+    private int typeTool;
+    private bool isUseTool = false;
 
     // Start is called before the first frame update
     private void Start()
     {
+        typeTool = 0;
         speech = 4f;
-        Rigidbody rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            StartCoroutine(ToolCoroutine());
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            typeTool++;
+            typeTool %= 4;
+            animator.SetInteger("typeTool", typeTool);
+        }
+        animator.SetBool("isUseTool", isUseTool);
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
         direction = new Vector3(moveX, moveY);
@@ -50,6 +63,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     private Vector3 VectorTranslate()
     {
         if (moveX == 0 && moveY == 0)
@@ -60,8 +74,10 @@ public class PlayerController : MonoBehaviour
         return speech * Time.deltaTime * direction / sqrt;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private IEnumerator ToolCoroutine()
     {
-        Debug.Log("colider");
+        isUseTool = true;
+        yield return new WaitForSeconds(1f);
+        isUseTool = false;
     }
 }

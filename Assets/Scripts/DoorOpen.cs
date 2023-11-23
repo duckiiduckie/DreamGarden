@@ -5,7 +5,6 @@ using UnityEngine;
 public class DoorOpen : MonoBehaviour
 {
     private Animator animator;
-    // Start is called before the first frame update
     private void Start()
     {
         animator = GetComponent<Animator>();

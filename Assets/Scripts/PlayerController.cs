@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     private int typeTool;
     private bool isUseTool = false;
 
-    // Start is called before the first frame update
     private void Start()
     {
         typeTool = 0;
@@ -21,7 +20,6 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))

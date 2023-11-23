@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7500296436957464259}
   - component: {fileID: 4884472758929676987}
   - component: {fileID: 315504972529431560}
+  - component: {fileID: 7993259459458144483}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Untagged
@@ -151,3 +152,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &7993259459458144483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2715741823940381436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7fa29bb1cc0b0340adce3717bc38ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 7418478853207348882, guid: a0bd81fd470abc649b9c204215bbfe69, type: 3}

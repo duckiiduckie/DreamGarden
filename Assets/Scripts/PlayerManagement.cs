@@ -7,6 +7,6 @@ public class PlayerManagement : MonoBehaviour
     public Inventory inventory;
     private void Awake()
     {
-        inventory = new Inventory(1);
+        inventory = new Inventory(3);
     }
 }

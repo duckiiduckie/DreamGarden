@@ -7,16 +7,16 @@ public class PlayerController : MonoBehaviour
 {
     private float moveX;
     private float moveY;
-    private float speech;
+    private float speed;
     private Animator animator;
     private Vector3 direction;
-    private int typeTool;
+    public int typeTool;
     private bool isUseTool = false;
 
     private void Start()
     {
         typeTool = 0;
-        speech = 4f;
+        speed = 2f;
         animator = GetComponent<Animator>();
     }
 
@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(ToolCoroutine());
+            if (typeTool > 0)
+                StartCoroutine(ToolCoroutine());
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -69,13 +70,13 @@ public class PlayerController : MonoBehaviour
             return Vector3.zero;
         }
         float sqrt = (float)Math.Sqrt(moveY * moveY + moveX * moveX);
-        return speech * Time.deltaTime * direction / sqrt;
+        return speed * Time.deltaTime * direction / sqrt;
     }
 
     private IEnumerator ToolCoroutine()
     {
         isUseTool = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.75f);
         isUseTool = false;
     }
 }

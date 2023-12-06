@@ -12,7 +12,7 @@ public class Collectable : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.name == "Player")
+        if (collision.gameObject.name == "Player")
         {
             PlayerManagement player = collision.GetComponent<PlayerManagement>();
             player.inventory.Add(gameObject.tag, spriteRenderer.sprite);

@@ -12,6 +12,7 @@ TagManager:
   - Corn
   - Stone
   - Wood
+  - Animal
   layers:
   - Default
   - TransparentFX

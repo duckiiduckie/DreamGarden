@@ -42,7 +42,15 @@ public class Inventory_UI : MonoBehaviour
             {
                 if (player.inventory.slots[i].type != string.Empty)
                 {
-                    slots[i].SetItem(player.inventory.slots[i]);
+                    if (player.inventory.slots[i].count == 0)
+                    {
+                        player.inventory.slots[i] = new Inventory.Slot();
+                        slots[i].SetEmpty();
+                    }
+                    else
+                    {
+                        slots[i].SetItem(player.inventory.slots[i]);
+                    }
                 }
                 else
                 {

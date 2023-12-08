@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class AnimalManagement : MonoBehaviour
 {
-    public GameObject item;
-    public GameObject food;
-    public bool isFull;
-    public bool canFeed;
-    public PlayerManagement player;
+    [SerializeField] private GameObject item;
+    [SerializeField] private GameObject food;
+    private bool isFull;
+    private bool canFeed;
+    private PlayerManagement player;
     private void Start()
     {
         isFull = false;

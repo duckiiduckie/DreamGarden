@@ -5,30 +5,52 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private GameObject seed;
     private float moveX;
     private float moveY;
     private float speed;
     private Animator animator;
     private Vector3 direction;
-    public int typeTool;
+    private int typeTool;
     private bool isUseTool = false;
+
+    public int TypeTool { get { return typeTool; } }
 
     private void Start()
     {
         typeTool = 0;
-        speed = 2f;
+        speed = 1.25f;
         animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
+        if (isUseTool)
+        {
+            if (Input.anyKeyDown)
+            {
+                isUseTool = false;
+            }
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (typeTool > 0)
                 StartCoroutine(ToolCoroutine());
+            if (typeTool == 3)
+            {
+                Plow();
+            }
+            if (typeTool == 0)
+            {
+                PlantOrClam();
+            }
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            if (isUseTool)
+            {
+                isUseTool = false;
+            }
             typeTool++;
             typeTool %= 4;
             animator.SetInteger("typeTool", typeTool);
@@ -78,5 +100,51 @@ public class PlayerController : MonoBehaviour
         isUseTool = true;
         yield return new WaitForSeconds(0.75f);
         isUseTool = false;
+    }
+
+    private void PlantOrClam()
+    {
+        Vector3Int position = new Vector3Int((int)Math.Round(transform.position.x), (int)Math.Round(transform.position.y), 0);
+        if (GameManager.instance.tileManager.IsInteractable(position))
+        {
+            Vector3 plantPosition = GameManager.instance.tileManager.CordinateTile(position) + new Vector3(0.5f, 0.5f, 0);
+            //Plant
+            if (!GameManager.instance.tileManager.dictVectorUse.ContainsKey(plantPosition))
+            {
+                if (seed != null)
+                {
+                    GameObject gameObject = Instantiate(seed, plantPosition, Quaternion.identity);
+                    GameManager.instance.tileManager.dictVectorUse.Add(plantPosition, gameObject);
+                }
+            }
+            //Clam
+            else
+            {
+                GameObject item = GameManager.instance.tileManager.dictVectorUse.GetValueOrDefault(plantPosition);
+                if (item != null)
+                {
+                    Growth growth = item.GetComponent<Growth>();
+                    if (growth.CanClam)
+                    {
+                        growth.Clamed();
+                        GameManager.instance.tileManager.dictVectorUse.Remove(plantPosition);
+                    }
+                }
+            }
+        }
+    }
+
+    private void Plow()
+    {
+        Vector3Int position = new Vector3Int((int)Math.Round(transform.position.x), (int)Math.Round(transform.position.y), 0);
+        if (GameManager.instance.tileManager.IsInteractable(position))
+        {
+            Vector3 plantPosition = GameManager.instance.tileManager.CordinateTile(position) + new Vector3(0.5f, 0.5f, 0);
+            GameObject item = GameManager.instance.tileManager.dictVectorUse.GetValueOrDefault(plantPosition);
+            if (item != null)
+            {
+                Destroy(item);
+            }
+        }
     }
 }

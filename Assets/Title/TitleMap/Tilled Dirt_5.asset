@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tilled Dirt_5
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 836807616, guid: 821e3f1858f50c8499a79842ad51cfb4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_Transform:
     e00: 1
     e01: 0

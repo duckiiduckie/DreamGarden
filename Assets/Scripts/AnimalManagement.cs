@@ -21,7 +21,6 @@ public class AnimalManagement : MonoBehaviour
         if (canFeed && Input.GetKeyDown(KeyCode.Space))
         {
             GenerateItem();
-            canFeed = false;
             StartCoroutine(FullCoroutine());
         }
     }
@@ -33,8 +32,9 @@ public class AnimalManagement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") && !isFull)
+        if (collision.gameObject.tag == "Player" && !isFull)
         {
+            player = collision.gameObject.GetComponent<PlayerManagement>();
             for (int i = 0; i < player.inventory.slots.Count; i++)
             {
                 if (food.tag == player.inventory.slots[i].type && player.inventory.slots[i].count > 0)
@@ -44,6 +44,7 @@ public class AnimalManagement : MonoBehaviour
                     return;
                 }
             }
+            canFeed = false;
         }
     }
 

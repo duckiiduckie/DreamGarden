@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -145,6 +145,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wood: {fileID: 332109373244720104, guid: b58eeb8ce0404124c90a3502c16e64a8, type: 3}
   fruit: {fileID: 7309003064646106431, guid: a6cee9a09439371468ef8ca53202a226, type: 3}
-  isRipe: 0
   treeRipeSprite: {fileID: -1738178554, guid: 8a53055455f1e8845911c1685a4c40dc, type: 3}
   treeSprite: {fileID: 1591488365, guid: 8a53055455f1e8845911c1685a4c40dc, type: 3}

@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 direction;
     private int typeTool;
     private bool isUseTool = false;
+    private TileManager tileManager;
+    public bool hasBook;
 
     public int TypeTool { get { return typeTool; } }
 
@@ -20,46 +22,17 @@ public class PlayerController : MonoBehaviour
     {
         typeTool = 0;
         speed = 1.25f;
+        hasBook = false;
         animator = GetComponent<Animator>();
+        tileManager = GameManager.instance.tileManager;
     }
 
     private void Update()
     {
-        if (isUseTool)
-        {
-            if (Input.anyKeyDown)
-            {
-                isUseTool = false;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (typeTool > 0)
-                StartCoroutine(ToolCoroutine());
-            if (typeTool == 3)
-            {
-                Plow();
-            }
-            if (typeTool == 0)
-            {
-                PlantOrClam();
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            if (isUseTool)
-            {
-                isUseTool = false;
-            }
-            typeTool++;
-            typeTool %= 4;
-            animator.SetInteger("typeTool", typeTool);
-        }
-        animator.SetBool("isUseTool", isUseTool);
-        moveX = Input.GetAxis("Horizontal");
-        moveY = Input.GetAxis("Vertical");
-        direction = new Vector3(moveX, moveY);
-        AnimateMovement();
+        CancelAnimation();
+        ActionInteract();
+        ChangeTool();
+        Movement();
     }
 
     private void FixedUpdate()
@@ -104,30 +77,30 @@ public class PlayerController : MonoBehaviour
 
     private void PlantOrClam()
     {
-        Vector3Int position = new Vector3Int((int)Math.Round(transform.position.x), (int)Math.Round(transform.position.y), 0);
-        if (GameManager.instance.tileManager.IsInteractable(position))
+        Vector3Int position = PositionInt();
+        if (tileManager.IsInteractable(position))
         {
-            Vector3 plantPosition = GameManager.instance.tileManager.CordinateTile(position) + new Vector3(0.5f, 0.5f, 0);
+            Vector3 plantPosition = tileManager.CordinateTile(position) + new Vector3(0.5f, 0.5f, 0);
             //Plant
-            if (!GameManager.instance.tileManager.dictVectorUse.ContainsKey(plantPosition))
+            if (!tileManager.dictVectorUse.ContainsKey(plantPosition))
             {
                 if (seed != null)
                 {
                     GameObject gameObject = Instantiate(seed, plantPosition, Quaternion.identity);
-                    GameManager.instance.tileManager.dictVectorUse.Add(plantPosition, gameObject);
+                    tileManager.dictVectorUse.Add(plantPosition, gameObject);
                 }
             }
             //Clam
             else
             {
-                GameObject item = GameManager.instance.tileManager.dictVectorUse.GetValueOrDefault(plantPosition);
+                GameObject item = tileManager.dictVectorUse.GetValueOrDefault(plantPosition);
                 if (item != null)
                 {
                     Growth growth = item.GetComponent<Growth>();
                     if (growth.CanClam)
                     {
                         growth.Clamed();
-                        GameManager.instance.tileManager.dictVectorUse.Remove(plantPosition);
+                        tileManager.dictVectorUse.Remove(plantPosition);
                     }
                 }
             }
@@ -136,14 +109,73 @@ public class PlayerController : MonoBehaviour
 
     private void Plow()
     {
-        Vector3Int position = new Vector3Int((int)Math.Round(transform.position.x), (int)Math.Round(transform.position.y), 0);
-        if (GameManager.instance.tileManager.IsInteractable(position))
+        Vector3Int position = PositionInt();
+        if (tileManager.IsInteractable(position))
         {
-            Vector3 plantPosition = GameManager.instance.tileManager.CordinateTile(position) + new Vector3(0.5f, 0.5f, 0);
-            GameObject item = GameManager.instance.tileManager.dictVectorUse.GetValueOrDefault(plantPosition);
+            Vector3 plantPosition = tileManager.CordinateTile(position) + new Vector3(0.5f, 0.5f, 0);
+            GameObject item = tileManager.dictVectorUse.GetValueOrDefault(plantPosition, null);
             if (item != null)
             {
+                tileManager.dictVectorUse.Remove(plantPosition);
                 Destroy(item);
+            }
+        }
+    }
+
+    private Vector3Int PositionInt()
+    {
+        return new Vector3Int((int)Math.Round(transform.position.x), (int)Math.Round(transform.position.y), 0);
+    }
+
+    private void CancelAnimation()
+    {
+        if (isUseTool)
+        {
+            if (Input.anyKeyDown)
+            {
+                isUseTool = false;
+            }
+        }
+    }
+
+    private void ChangeTool()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (isUseTool)
+            {
+                isUseTool = false;
+            }
+            typeTool++;
+            typeTool %= 4;
+            animator.SetInteger("typeTool", typeTool);
+        }
+    }
+
+    private void Movement()
+    {
+        animator.SetBool("isUseTool", isUseTool);
+        moveX = Input.GetAxis("Horizontal");
+        moveY = Input.GetAxis("Vertical");
+        direction = new Vector3(moveX, moveY);
+        AnimateMovement();
+    }
+
+    private void ActionInteract()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (typeTool > 0)
+            {
+                StartCoroutine(ToolCoroutine());
+                if (typeTool == 3)
+                {
+                    Plow();
+                }
+            }
+            else
+            {
+                PlantOrClam();
             }
         }
     }
